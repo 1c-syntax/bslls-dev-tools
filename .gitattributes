@@ -1,0 +1,5 @@
+*.java eol=lf
+*.kt eol=lf
+*.bsl eol=lf
+*.md eol=lf
+*.bat eol=crlf
