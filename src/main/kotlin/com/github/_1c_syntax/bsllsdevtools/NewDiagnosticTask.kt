@@ -43,7 +43,7 @@ open class NewDiagnosticTask @javax.inject.Inject constructor(objects: ObjectFac
   private var key = ""
 
   @Option(option = "nameRu", description = "Diagnostic name in Russian (optional)")
-  private var nameRu = "<�?мя диагностики>"
+  private var nameRu = "<Имя диагностики>"
 
   @Option(option = "nameEn", description = "Diagnostic name in English (optional)")
   private var nameEn = "<Diagnostic name>"
@@ -92,7 +92,7 @@ open class NewDiagnosticTask @javax.inject.Inject constructor(objects: ObjectFac
     createFile(
       "${docPath}/diagnostics/${key}.md",
       getText("Template_ru.md")
-        .replace("<�?мя диагностики>", nameRu)
+        .replace("<Имя диагностики>", nameRu)
         .replace("<DiagnosticKey>", key)
     )
 
@@ -119,7 +119,7 @@ open class NewDiagnosticTask @javax.inject.Inject constructor(objects: ObjectFac
     createFile(
       "${srcPath}/main/resources/${packPath}/${key}Diagnostic_ru.properties",
       getText("TemplateDiagnostic_ru.properties")
-        .replace("<�?мя диагностики>", nameRu)
+        .replace("<Имя диагностики>", nameRu)
     )
 
     createFile(

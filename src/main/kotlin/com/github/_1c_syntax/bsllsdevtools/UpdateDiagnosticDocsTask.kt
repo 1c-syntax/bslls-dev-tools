@@ -199,7 +199,7 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
 
     if (lang == "ru") {
       paramsBody = "## Параметры \n\n" + paramsBody
-        .replace("<NameHeader>", "�?мя")
+        .replace("<NameHeader>", "Имя")
         .replace("<TypeHeader>", "Тип")
         .replace("<DescriptionHeader>", "Описание")
         .replace("<DefHeader>", "Значение по умолчанию")

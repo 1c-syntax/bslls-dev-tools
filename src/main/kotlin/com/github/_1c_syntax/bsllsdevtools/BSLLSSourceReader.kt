@@ -58,7 +58,7 @@ class BSLLSSourceReader {
       "CRITICAL" to "Критичный",
       "MAJOR" to "Важный",
       "MINOR" to "Незначительный",
-      "INFO" to "�?нформационный"
+      "INFO" to "Информационный"
     )
 
     val severityEnMap = hashMapOf(
