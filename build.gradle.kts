@@ -35,7 +35,7 @@ tasks {
 gradlePlugin {
   plugins {
     create("bslls-dev-tools") {
-      id = "com.github._1c_syntax.bslls-dev-tools"
+      id = "com.github.1c-syntax.bslls-dev-tools"
       implementationClass = "com.github._1c_syntax.bsllsdevtools.BSLDeveloperToolsPlugin"
     }
   }
