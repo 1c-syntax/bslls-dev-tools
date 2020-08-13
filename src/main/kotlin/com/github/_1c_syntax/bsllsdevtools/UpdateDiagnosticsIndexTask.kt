@@ -42,7 +42,7 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
   }
 
   private val templateIndexLine =
-    "\n| [<Name>](<Name>.md) | <Description> | <Activated> | <Severity> | <Type> | <Tags> |"
+    "\n [<Name>](<Name>.md) | <Description> | <Activated> | <Severity> | <Type> | <Tags> "
 
   @OutputDirectory
   val outputDir: DirectoryProperty = objects.directoryProperty()
@@ -63,7 +63,7 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
       val tags = metadata.getOrDefault("tags", "").toString().toLowerCase()
         .replace("[", "`")
         .replace("]", "`")
-        .replace(", ", "`<br/>`")
+        .replace(", ", "`<br>`")
       if (lang == "ru") {
         typeString = typeRuMap.getOrDefault(metadata.getOrDefault("type", ""), "")
         indexText += templateIndexLine

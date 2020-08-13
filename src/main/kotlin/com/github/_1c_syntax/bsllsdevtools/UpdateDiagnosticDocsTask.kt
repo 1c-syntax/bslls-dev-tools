@@ -50,13 +50,13 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
       "### <DiagnosticIgnorance>\n\n```bsl\n// BSLLS:<DiagnosticKey>-off\n// BSLLS:<DiagnosticKey>-on\n```\n\n" +
       "### <ParameterConfig>\n\n```json\n\"<DiagnosticKey>\": <DiagnosticConfig>\n```\n"
   private val templateDocMetadata =
-    "| <TypeHeader> | <ScopeHeader> | <SeverityHeader> | <ActivatedHeader> | <MinutesHeader> | <TagsHeader> |\n" +
-      "| :-: | :-: | :-: | :-: | :-: | :-: |\n" +
-      "| `<Type>` | `<Scope>` | `<Severity>` | `<Activated>` | `<Minutes>` | <Tags> |\n"
+    " <TypeHeader> | <ScopeHeader> | <SeverityHeader> | <ActivatedHeader> | <MinutesHeader> | <TagsHeader> \n" +
+      " :-: | :-: | :-: | :-: | :-: | :-: \n" +
+      " `<Type>` | `<Scope>` | `<Severity>` | `<Activated>` | `<Minutes>` | <Tags> \n"
   private val templateDocHeaderParams =
-    "| <NameHeader> | <TypeHeader> | <DescriptionHeader> | <DefHeader> |\n" +
-      "| :-: | :-: | :-- | :-: |\n"
-  private val templateDocLineParams = "| `<Name>` | `<Type>` | ```<Description>``` | ```<Def>``` |\n"
+    " <NameHeader> | <TypeHeader> | <DescriptionHeader> | <DefHeader> \n" +
+      " :-: | :-: | :-- | :-: \n"
+  private val templateDocLineParams = " `<Name>` | `<Type>` | ```<Description>``` | ```<Def>``` \n"
 
   @OutputDirectory
   val outputDir: DirectoryProperty = objects.directoryProperty()
@@ -129,22 +129,22 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
         "<Tags>", metadata.getOrDefault("tags", "").toString().toLowerCase()
           .replace("[", "`")
           .replace("]", "`")
-          .replace(", ", "`<br/>`")
+          .replace(", ", "`<br>`")
       )
       .replace(
         "<Scope>",
         if (metadata.getOrDefault("scope", "")
             .toString() == "ALL"
-        ) "BSL`<br/>`OS" else metadata.getOrDefault("scope", "").toString()
+        ) "BSL`<br>`OS" else metadata.getOrDefault("scope", "").toString()
       )
 
     if (lang == "ru") {
       metadataBody = metadataBody
         .replace("<TypeHeader>", "Тип")
-        .replace("<ScopeHeader>", "Поддерживаются<br/>языки")
+        .replace("<ScopeHeader>", "Поддерживаются<br>языки")
         .replace("<SeverityHeader>", "Важность")
-        .replace("<ActivatedHeader>", "Включена<br/>по умолчанию")
-        .replace("<MinutesHeader>", "Время на<br/>исправление (мин)")
+        .replace("<ActivatedHeader>", "Включена<br>по умолчанию")
+        .replace("<MinutesHeader>", "Время на<br>исправление (мин)")
         .replace("<TagsHeader>", "Тэги")
         .replace(
           "<Type>", typeRuMap
@@ -166,8 +166,8 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
         .replace("<TypeHeader>", "Type")
         .replace("<ScopeHeader>", "Scope")
         .replace("<SeverityHeader>", "Severity")
-        .replace("<ActivatedHeader>", "Activated<br/>by default")
-        .replace("<MinutesHeader>", "Minutes<br/>to fix")
+        .replace("<ActivatedHeader>", "Activated<br>by default")
+        .replace("<MinutesHeader>", "Minutes<br>to fix")
         .replace("<TagsHeader>", "Tags")
         .replace(
           "<Type>", typeEnMap

@@ -166,9 +166,8 @@ class BSLLSSourceReader {
 
     private fun createLSConfiguration(classLoader: ClassLoader, lang: String): Any {
       val languageServerConfigurationClass = classLoader.loadClass(lsConfigurationClassName)
-      val lsConfiguration = languageServerConfigurationClass
-        .getDeclaredMethod("create")
-        .invoke(languageServerConfigurationClass)
+      val lsConfiguration = languageServerConfigurationClass.getConstructor()
+        .newInstance()
 
       val languageClass = classLoader.loadClass(languageClassName)
       val language = languageClass.getMethod("valueOf", classLoader.loadClass("java.lang.String"))
