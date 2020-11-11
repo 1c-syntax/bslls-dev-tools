@@ -60,12 +60,13 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
     diagnosticsMetadata.forEach {
       val metadata = it.value
       val typeString: String
+      val typeKey: String = metadata.getOrDefault("type", "") as String
       val tags = metadata.getOrDefault("tags", "").toString().toLowerCase()
         .replace("[", "`")
         .replace("]", "`")
         .replace(", ", "`<br>`")
       if (lang == "ru") {
-        typeString = typeRuMap.getOrDefault(metadata.getOrDefault("type", ""), "")
+        typeString = typeRuMap.getOrDefault(typeKey, "")
         indexText += templateIndexLine
           .replace("<Name>", it.key)
           .replace("<Description>", metadata["description_ru"].toString())
@@ -77,12 +78,12 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
           )
           .replace(
             "<Severity>", severityRuMap
-              .getOrDefault(metadata.getOrDefault("severity", ""), "")
+              .getOrDefault(metadata.getOrDefault("severity", "") as String, "")
           )
           .replace("<Type>", typeString)
           .replace("<Tags>", tags)
       } else {
-        typeString = typeEnMap.getOrDefault(metadata.getOrDefault("type", ""), "")
+        typeString = typeEnMap.getOrDefault(typeKey, "")
         indexText += templateIndexLine
           .replace("<Name>", it.key)
           .replace("<Description>", metadata["description_en"].toString())
@@ -94,13 +95,13 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
           )
           .replace(
             "<Severity>", severityEnMap
-              .getOrDefault(metadata.getOrDefault("severity", ""), "")
+              .getOrDefault(metadata.getOrDefault("severity", "") as String, "")
           )
           .replace("<Type>", typeString)
           .replace("<Tags>", tags)
       }
 
-      typeCount[typeString] = typeCount.getOrDefault(typeString, 0) + 1
+      typeCount[typeKey] = typeCount.getOrDefault(typeKey, 0) + 1
     }
 
     val indexPath = if (lang == "ru") {
@@ -120,11 +121,16 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
       table = "| Key | Name| Enabled by default | Severity | Type | Tags |"
     }
     table += "\n| --- | --- | :-: | --- | --- | --- |"
-    total += " **${diagnosticsMetadata.size}**\n\n* ${typeCount.toString()
-      .replace("{", "")
-      .replace("}", "")
-      .replace("=", ": **")
-      .replace(",", "**\n*")}**"
+
+    total += " **${diagnosticsMetadata.size}**\n\n* ${
+      typeCount.map {
+        if (lang == "ru") {
+          typeRuMap.getOrDefault(it.key, "")
+        } else {
+          typeEnMap.getOrDefault(it.key, "")
+        } + ": **${it.value}**"
+      }.joinToString("\n")
+    }**"
     val indexHeader = text.indexOf(header)
     indexPath.writeText(
       text.substring(0, indexHeader - 1) + "\n${header}\n\n${total}\n\n${table}${indexText}",
