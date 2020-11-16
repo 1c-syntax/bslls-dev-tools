@@ -129,8 +129,8 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
         } else {
           typeEnMap.getOrDefault(it.key, "")
         } + ": **${it.value}**"
-      }.joinToString("\n")
-    }**"
+      }.joinToString("\n* ")
+    }\n"
     val indexHeader = text.indexOf(header)
     indexPath.writeText(
       text.substring(0, indexHeader - 1) + "\n${header}\n\n${total}\n\n${table}${indexText}",

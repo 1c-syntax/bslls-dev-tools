@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.github.1c-syntax"
-version = "0.3"
+version = "0.3.3"
 
 repositories {
   mavenLocal()
