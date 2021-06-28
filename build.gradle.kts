@@ -3,7 +3,7 @@ import java.util.*
 plugins {
   java
   jacoco
-  kotlin("jvm") version "1.3.72"
+  kotlin("jvm") version "1.5.20"
   `maven-publish`
   id("java-gradle-plugin")
   id("com.github.hierynomus.license") version "0.16.1"
