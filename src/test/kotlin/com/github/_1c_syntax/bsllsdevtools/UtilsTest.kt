@@ -1,3 +1,24 @@
+/*
+ * This file is a part of BSLLS Development tools gradle plugin.
+ *
+ * Copyright © 2020-2021
+ * Valery Maximov <maximovvalery@gmail.com> and contributors
+ *
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ *
+ * BSLLS Development tools gradle plugin is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * BSLLS Development tools gradle plugin is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with BSLLS Development tools gradle plugin.
+ */
 /**
  * This file is a part of BSLLS Development tools gradle plugin.
  *
@@ -53,7 +74,7 @@ internal class UtilsTest {
 
     assertThat(keysMaxLen["Key1"]).isEqualTo(4)
     assertThat(keysMaxLen["Key2"]).isEqualTo(6)
-    assertThat(keysMaxLen["Key3"]).isZero()
+    assertThat(keysMaxLen["Key3"]).isEqualTo(0)
     assertThat(keysMaxLen["Key4"]).isEqualTo(28)
   }
 

@@ -1,4 +1,4 @@
-/**
+/*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
  * Copyright © 2020-2021
@@ -47,18 +47,6 @@ open class NewDiagnosticTask @javax.inject.Inject constructor(objects: ObjectFac
 
   @Option(option = "nameEn", description = "Diagnostic name in English (optional)")
   private var nameEn = "<Diagnostic name>"
-
-  fun setKey(key: String) {
-    this.key = key
-  }
-
-  fun setNameRu(nameRu: String) {
-    this.nameRu = nameRu
-  }
-
-  fun setNameEn(nameEn: String) {
-    this.nameEn = nameEn
-  }
 
   @OutputDirectory
   val outputDir: DirectoryProperty = objects.directoryProperty()

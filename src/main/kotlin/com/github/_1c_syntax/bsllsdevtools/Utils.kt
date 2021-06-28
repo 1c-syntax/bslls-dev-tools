@@ -1,4 +1,4 @@
-/**
+/*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
  * Copyright © 2020-2021
