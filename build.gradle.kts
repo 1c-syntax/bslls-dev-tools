@@ -6,7 +6,7 @@ plugins {
   kotlin("jvm") version "1.3.72"
   `maven-publish`
   id("java-gradle-plugin")
-  id("com.github.hierynomus.license") version "0.15.0"
+  id("com.github.hierynomus.license") version "0.16.1"
 }
 
 group = "com.github.1c-syntax"
