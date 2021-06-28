@@ -10,17 +10,23 @@ plugins {
 }
 
 group = "com.github.1c-syntax"
-version = "0.3.3"
+version = "0.4.0"
 
 repositories {
   mavenLocal()
   mavenCentral()
 }
 
+val junitVersion = "5.6.1"
+
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
   compileOnly(gradleApi())
   implementation("commons-io", "commons-io", "2.6")
+
+  testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
+  testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junitVersion)
+  testImplementation("org.assertj", "assertj-core", "3.18.1")
 }
 
 tasks {
