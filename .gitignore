@@ -68,3 +68,5 @@ gen/
 # mkdocs
 temp/
 public/
+/.idea/codeStyles/Project.xml
+/.idea/encodings.xml

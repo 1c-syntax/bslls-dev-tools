@@ -1,7 +1,7 @@
-/**
+/*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright © 2020-2020
+ * Copyright © 2020-2021
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -49,14 +49,6 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
       "<!-- Блоки ниже заполняются автоматически, не трогать -->\n" +
       "### <DiagnosticIgnorance>\n\n```bsl\n// BSLLS:<DiagnosticKey>-off\n// BSLLS:<DiagnosticKey>-on\n```\n\n" +
       "### <ParameterConfig>\n\n```json\n\"<DiagnosticKey>\": <DiagnosticConfig>\n```\n"
-  private val templateDocMetadata =
-    " <TypeHeader> | <ScopeHeader> | <SeverityHeader> | <ActivatedHeader> | <MinutesHeader> | <TagsHeader> \n" +
-      " :-: | :-: | :-: | :-: | :-: | :-: \n" +
-      " `<Type>` | `<Scope>` | `<Severity>` | `<Activated>` | `<Minutes>` | <Tags> \n"
-  private val templateDocHeaderParams =
-    " <NameHeader> | <TypeHeader> | <DescriptionHeader> | <DefHeader> \n" +
-      " :-: | :-: | :-- | :-: \n"
-  private val templateDocLineParams = " `<Name>` | `<Type>` | ```<Description>``` | ```<Def>``` \n"
 
   @OutputDirectory
   val outputDir: DirectoryProperty = objects.directoryProperty()
@@ -81,6 +73,7 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
 
     var header = "## Описание диагностики"
     var footer = "## Сниппеты"
+
     val headerText = templateDocHeader
       .replace("<Description>", metadata["description_$lang"].toString())
       .replace("<Metadata>", makeDiagnosticMetadata(lang, metadata))
@@ -123,70 +116,73 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
   }
 
   private fun makeDiagnosticMetadata(lang: String, metadata: HashMap<String, Any>): String {
-    var metadataBody = templateDocMetadata
-      .replace("<Minutes>", metadata.getOrDefault("minutesToFix", "").toString())
-      .replace(
-        "<Tags>", metadata.getOrDefault("tags", "").toString().toLowerCase()
-          .replace("[", "`")
-          .replace("]", "`")
-          .replace(", ", "`<br>`")
-      )
-      .replace(
-        "<Scope>",
-        if (metadata.getOrDefault("scope", "")
-            .toString() == "ALL"
-        ) "BSL`<br>`OS" else metadata.getOrDefault("scope", "").toString()
-      )
+    val keys = hashMapOf(
+      "Type" to "",
+      "Scope" to "",
+      "Severity" to "",
+      "Activated" to "",
+      "Minutes" to "",
+      "Tags" to ""
+    )
+
+    val keysMaxLen = Utils.createKeysLenMap(keys)
+
+    val headerValues = HashMap(keys)
+    val tableValues = HashMap(keys)
 
     if (lang == "ru") {
-      metadataBody = metadataBody
-        .replace("<TypeHeader>", "Тип")
-        .replace("<ScopeHeader>", "Поддерживаются<br>языки")
-        .replace("<SeverityHeader>", "Важность")
-        .replace("<ActivatedHeader>", "Включена<br>по умолчанию")
-        .replace("<MinutesHeader>", "Время на<br>исправление (мин)")
-        .replace("<TagsHeader>", "Тэги")
-        .replace(
-          "<Type>", typeRuMap
-            .getOrDefault(metadata.getOrDefault("type", ""), "")
-        )
-        .replace(
-          "<Severity>",
-          severityRuMap
-            .getOrDefault(metadata.getOrDefault("severity", ""), "")
-        )
-        .replace(
-          "<Activated>",
-          if (metadata.getOrDefault("activatedByDefault", "").toString()
-              .toLowerCase() != "false"
-          ) "Да" else "Нет"
-        )
+      headerValues["Type"] = "Тип"
+      headerValues["Scope"] = "Поддерживаются<br>языки"
+      headerValues["Severity"] = "Важность"
+      headerValues["Activated"] = "Включена<br>по умолчанию"
+      headerValues["Minutes"] = "Время на<br>исправление (мин)"
+      headerValues["Tags"] = "Теги"
+
+      tableValues["Type"] = "`${typeRuMap.getOrDefault(metadata.getOrDefault("type", ""), "")}`"
+      tableValues["Severity"] = "`${severityRuMap.getOrDefault(metadata.getOrDefault("severity", ""), "")}`"
+      tableValues["Activated"] = "`${
+        if (metadata.getOrDefault("activatedByDefault", "").toString()
+            .toLowerCase() != "false"
+        ) "Да" else "Нет"
+      }`"
     } else {
-      metadataBody = metadataBody
-        .replace("<TypeHeader>", "Type")
-        .replace("<ScopeHeader>", "Scope")
-        .replace("<SeverityHeader>", "Severity")
-        .replace("<ActivatedHeader>", "Activated<br>by default")
-        .replace("<MinutesHeader>", "Minutes<br>to fix")
-        .replace("<TagsHeader>", "Tags")
-        .replace(
-          "<Type>", typeEnMap
-            .getOrDefault(metadata.getOrDefault("type", ""), "")
-        )
-        .replace(
-          "<Severity>",
-          severityEnMap
-            .getOrDefault(metadata.getOrDefault("severity", ""), "")
-        )
-        .replace(
-          "<Activated>",
-          if (metadata.getOrDefault("activatedByDefault", "").toString()
-              .toLowerCase() != "false"
-          ) "Yes" else "No"
-        )
+      headerValues["Type"] = "Type"
+      headerValues["Scope"] = "Scope"
+      headerValues["Severity"] = "Severity"
+      headerValues["Activated"] = "Activated<br>by default"
+      headerValues["Minutes"] = "Minutes<br>to fix"
+      headerValues["Tags"] = "Tags"
+
+      tableValues["Type"] = "`${typeEnMap.getOrDefault(metadata.getOrDefault("type", ""), "")}`"
+      tableValues["Severity"] = "`${severityEnMap.getOrDefault(metadata.getOrDefault("severity", ""), "")}`"
+      tableValues["Activated"] = "`${
+        if (metadata.getOrDefault("activatedByDefault", "").toString()
+            .toLowerCase() != "false"
+        ) "Yes" else "No"
+      }`"
     }
 
-    return metadataBody
+    tableValues["Scope"] = "`${
+      if (metadata.getOrDefault("scope", "")
+          .toString() == "ALL"
+      ) "BSL`<br>`OS" else metadata.getOrDefault("scope", "").toString()
+    }`"
+    tableValues["Minutes"] = "`${metadata.getOrDefault("minutesToFix", "")}`"
+    tableValues["Tags"] = metadata.getOrDefault("tags", "").toString().toLowerCase()
+      .replace("[", "`")
+      .replace("]", "`")
+      .replace(", ", "`<br>`")
+
+    // запоминаем максимальные длины строк + конецевые пробелы
+    Utils.computeMaxLens(keysMaxLen, headerValues)
+    Utils.computeMaxLens(keysMaxLen, tableValues)
+
+    // получаем строки с учетом длины
+    val header = computeMetaLineString(keysMaxLen, headerValues)
+    val line = computeMetaLineString(keysMaxLen, tableValues)
+    val order = computeMetaOrderString(keysMaxLen)
+
+    return "$header\n$order\n$line\n"
   }
 
   private fun makeDiagnosticParams(lang: String, metadata: HashMap<String, Any>): String {
@@ -195,56 +191,70 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
       return ""
     }
 
-    var paramsBody = templateDocHeaderParams
+    val paramsBody: String
+
+    val keys = hashMapOf(
+      "Name" to "",
+      "Type" to "",
+      "Description" to "",
+      "Def" to ""
+    )
+
+    val keysMaxLen = Utils.createKeysLenMap(keys)
+    val headerValues = HashMap(keys)
+    val tableValues = ArrayList<HashMap<String, String>>()
 
     if (lang == "ru") {
-      paramsBody = "## Параметры \n\n" + paramsBody
-        .replace("<NameHeader>", "Имя")
-        .replace("<TypeHeader>", "Тип")
-        .replace("<DescriptionHeader>", "Описание")
-        .replace("<DefHeader>", "Значение по умолчанию")
+      paramsBody = "## Параметры \n\n"
 
-      params.forEach {
-        if (it is HashMap<*, *>) {
-          var typeValue = it.getOrDefault("type", "").toString()
-          typeValue = typeParamRuMap.getOrDefault(typeValue, typeValue)
-          val paramName = it.getOrDefault("name", "").toString()
-          paramsBody += templateDocLineParams
-            .replace("<Name>", paramName)
-            .replace("<Type>", typeValue)
-            .replace(
-              "<Description>", it
-                .getOrDefault("description_ru", "").toString()
-            )
-            .replace(
-              "<Def>", it
-                .getOrDefault("defaultValue", "").toString()
-            )
-        }
-      }
-
+      headerValues["Name"] = "Имя"
+      headerValues["Type"] = "Тип"
+      headerValues["Description"] = "Описание"
+      headerValues["Def"] = "Значение<br>по умолчанию"
     } else {
-      paramsBody = "## Parameters \n\n" + paramsBody
-        .replace("<NameHeader>", "Name")
-        .replace("<TypeHeader>", "Type")
-        .replace("<DescriptionHeader>", "Description")
-        .replace("<DefHeader>", "Default value")
+      paramsBody = "## Parameters \n\n"
 
-      params.forEach {
-        if (it is HashMap<*, *>) {
-          val paramName = it.getOrDefault("name", "").toString()
-          paramsBody += templateDocLineParams
-            .replace("<Name>", paramName)
-            .replace("<Type>", it.getOrDefault("type", "").toString())
-            .replace(
-              "<Description>", it
-                .getOrDefault("description_en", "").toString()
-            )
-            .replace("<Def>", it.getOrDefault("defaultValue", "").toString())
+      headerValues["Name"] = "Name"
+      headerValues["Type"] = "Type"
+      headerValues["Description"] = "Description"
+      headerValues["Def"] = "Default value"
+    }
+
+    params.forEach {
+      if (it is HashMap<*, *>) {
+
+        val tableValue = HashMap(keys)
+        tableValue["Name"] = "`${it.getOrDefault("name", "")}`"
+
+        var typeValue = it.getOrDefault("type", "").toString()
+        if (lang == "ru") {
+          typeValue = typeParamRuMap.getOrDefault(typeValue, typeValue)
+          tableValue["Description"] = "`${it.getOrDefault("description_ru", "")}`"
+        } else {
+          tableValue["Description"] = "`${it.getOrDefault("description_en", "")}`"
         }
+
+        tableValue["Type"] = "`${typeValue}`"
+        tableValue["Def"] = "`${it.getOrDefault("defaultValue", "")}`"
+
+        tableValues.add(tableValue)
       }
     }
-    return paramsBody + "\n"
+
+    // запоминаем максимальные длины строк + концевые пробелы
+    Utils.computeMaxLens(keysMaxLen, headerValues)
+    Utils.computeMaxLens(keysMaxLen, tableValues)
+
+    // получаем строки с учетом длины
+    val header = computeParamsLineString(keysMaxLen, headerValues)
+    var lines = ""
+    tableValues.forEach {
+      lines += computeParamsLineString(keysMaxLen, it) + "\n"
+    }
+
+    val order = computeParamsOrderString(keysMaxLen)
+
+    return "$paramsBody\n$header\n$order\n$lines"
   }
 
   private fun makeDiagnosticConfigExample(metadata: HashMap<String, Any>): String {
@@ -264,8 +274,10 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
             || it.getOrDefault("type", "") == "Float"
           ) "" else "\""
           configBody += "$configDelimiter    \"${it.getOrDefault("name", "")}\": " +
-            "${qoutes}${it.getOrDefault("defaultValue", "")
-              .toString().replace("\\", "\\\\")}${qoutes}"
+            "${qoutes}${
+              it.getOrDefault("defaultValue", "")
+                .toString().replace("\\", "\\\\")
+            }${qoutes}"
           configDelimiter = ",\n"
         }
       }
@@ -274,6 +286,44 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
     }
 
     return ""
+  }
+
+  private fun computeMetaLineString(maxKeysLen: HashMap<String, Int>, values: HashMap<String, String>): String {
+    return "| ${values["Type"]?.let { maxKeysLen["Type"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Scope"]?.let { maxKeysLen["Scope"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Severity"]?.let { maxKeysLen["Severity"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Activated"]?.let { maxKeysLen["Activated"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Minutes"]?.let { maxKeysLen["Minutes"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Tags"]?.let { maxKeysLen["Tags"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "|"
+  }
+
+  private fun computeMetaOrderString(maxKeysLen: HashMap<String, Int>): String {
+    val dash = "-"
+    return "|:${dash.repeat(maxKeysLen["Type"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Scope"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Severity"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Activated"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Minutes"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Tags"]!!)}:" +
+      "|"
+  }
+
+  private fun computeParamsLineString(maxKeysLen: HashMap<String, Int>, values: HashMap<String, String>): String {
+    return "| ${values["Name"]?.let { maxKeysLen["Name"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Type"]?.let { maxKeysLen["Type"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Description"]?.let { maxKeysLen["Description"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "| ${values["Def"]?.let { maxKeysLen["Def"]?.let { len -> Utils.wrapSpaces(it, len) } }} " +
+      "|"
+  }
+
+  private fun computeParamsOrderString(maxKeysLen: HashMap<String, Int>): String {
+    val dash = "-"
+    return "|:${dash.repeat(maxKeysLen["Name"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Type"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Description"]!!)}:" +
+      "|:${dash.repeat(maxKeysLen["Def"]!!)}:" +
+      "|"
   }
 
 }
