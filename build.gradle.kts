@@ -21,6 +21,7 @@ val junitVersion = "5.6.1"
 
 dependencies {
   compileOnly(gradleApi())
+  implementation(kotlin("stdlib-jdk8"))
   implementation("commons-io", "commons-io", "2.6")
 
   testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
@@ -30,10 +31,10 @@ dependencies {
 
 tasks {
   compileKotlin {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "1.8"
   }
   compileTestKotlin {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "1.8"
   }
 }
 
