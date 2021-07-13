@@ -4,7 +4,7 @@ plugins {
   java
   jacoco
   `maven-publish`
-  kotlin("jvm") version "1.4.31"
+  kotlin("jvm") version "1.5.21"
   id("java-gradle-plugin")
   id("net.kyori.indra.license-header") version "1.3.1"
 }
