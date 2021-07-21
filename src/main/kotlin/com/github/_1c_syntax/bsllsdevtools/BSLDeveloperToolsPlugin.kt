@@ -43,7 +43,7 @@ class BSLDeveloperToolsPlugin : Plugin<Project> {
       it.description = "Run all precommit tasks"
       it.group = "Developer tools"
       it.dependsOn(":test")
-      it.dependsOn(":licenseFormat")
+      it.dependsOn(":updateLicenses")
       it.dependsOn(":updateDiagnosticDocs")
       it.dependsOn(":updateDiagnosticsIndex")
       it.dependsOn(":updateJsonSchema")
