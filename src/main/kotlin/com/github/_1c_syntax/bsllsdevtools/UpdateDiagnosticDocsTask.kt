@@ -205,14 +205,14 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
     val tableValues = ArrayList<HashMap<String, String>>()
 
     if (lang == "ru") {
-      paramsBody = "## Параметры \n\n"
+      paramsBody = "## Параметры\n\n"
 
       headerValues["Name"] = "Имя"
       headerValues["Type"] = "Тип"
       headerValues["Description"] = "Описание"
       headerValues["Def"] = "Значение<br>по умолчанию"
     } else {
-      paramsBody = "## Parameters \n\n"
+      paramsBody = "## Parameters\n\n"
 
       headerValues["Name"] = "Name"
       headerValues["Type"] = "Type"
