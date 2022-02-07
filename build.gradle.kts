@@ -6,7 +6,7 @@ plugins {
   `maven-publish`
   kotlin("jvm") version "1.4.31"
   id("java-gradle-plugin")
-  id("net.kyori.indra.license-header") version "1.3.1"
+  id("net.kyori.indra.license-header") version "2.1.1"
 }
 
 group = "com.github.1c-syntax"
