@@ -3,10 +3,17 @@ import java.util.*
 plugins {
   java
   jacoco
-  `maven-publish`
+  id("maven-publish")
   kotlin("jvm") version "1.6.10"
   id("java-gradle-plugin")
   id("org.cadixdev.licenser") version "0.6.1"
+  id("com.gradle.plugin-publish") version "0.18.0"
+}
+
+pluginBundle {
+  website = "https://github.com/1c-syntax/bslls-dev-tools"
+  vcsUrl = "https://github.com/1c-syntax/bslls-dev-tools.git"
+  tags = listOf("bslls", "dev-tools")
 }
 
 group = "io.github.1c-syntax"
@@ -40,6 +47,8 @@ gradlePlugin {
     create("bslls-dev-tools") {
       id = "io.github.1c-syntax.bslls-dev-tools"
       implementationClass = "com.github._1c_syntax.bsllsdevtools.BSLDeveloperToolsPlugin"
+      displayName = "BSLLS Development tools gradle plugin"
+      description = "BSLLS Development tools gradle plugin"
     }
   }
 }
