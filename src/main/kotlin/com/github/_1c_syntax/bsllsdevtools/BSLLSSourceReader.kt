@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright © 2020-2021
+ * Copyright (c) 2020-2022
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -171,7 +171,7 @@ class BSLLSSourceReader {
 
       val languageClass = classLoader.loadClass(languageClassName)
       val language = languageClass.getMethod("valueOf", classLoader.loadClass("java.lang.String"))
-        .invoke(languageClass, lang.toUpperCase())
+        .invoke(languageClass, lang.uppercase())
 
       languageServerConfigurationClass.getDeclaredMethod("setLanguage", languageClass)
         .invoke(lsConfiguration, language)

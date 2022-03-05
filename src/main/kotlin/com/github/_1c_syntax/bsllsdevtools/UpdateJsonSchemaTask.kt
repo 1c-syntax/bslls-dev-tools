@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright © 2020-2021
+ * Copyright (c) 2020-2022
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -99,7 +99,7 @@ open class UpdateJsonSchemaTask @javax.inject.Inject constructor(objects: Object
       if (parameters.isNotEmpty()) {
         parameters.forEach {
           if (it is HashMap<*, *>) {
-            val typeString = it.getOrDefault("type", "").toString().toLowerCase()
+            val typeString = it.getOrDefault("type", "").toString().lowercase()
               .replace("pattern", "string")
               .replace("float", "number")
             val value = when (typeString) {

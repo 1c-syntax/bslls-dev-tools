@@ -4,27 +4,25 @@ plugins {
   java
   jacoco
   `maven-publish`
-  kotlin("jvm") version "1.4.31"
+  kotlin("jvm") version "1.6.10"
   id("java-gradle-plugin")
-  id("net.kyori.indra.license-header") version "1.3.1"
+  id("org.cadixdev.licenser") version "0.6.1"
 }
 
-group = "com.github.1c-syntax"
-version = "0.4.0"
+group = "io.github.1c-syntax"
+version = "0.5.1"
 
 repositories {
   mavenLocal()
   mavenCentral()
 }
 
-val junitVersion = "5.6.1"
-
 dependencies {
   compileOnly(gradleApi())
   implementation("commons-io", "commons-io", "2.6")
 
-  testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
-  testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junitVersion)
+  testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.1")
+  testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.6.1")
   testImplementation("org.assertj", "assertj-core", "3.18.1")
 }
 
@@ -40,7 +38,7 @@ tasks {
 gradlePlugin {
   plugins {
     create("bslls-dev-tools") {
-      id = "com.github.1c-syntax.bslls-dev-tools"
+      id = "io.github.1c-syntax.bslls-dev-tools"
       implementationClass = "com.github._1c_syntax.bsllsdevtools.BSLDeveloperToolsPlugin"
     }
   }
@@ -59,7 +57,7 @@ tasks.test {
   }
 
   reports {
-    html.isEnabled = true
+    html.required.set(true)
   }
 }
 
@@ -69,13 +67,14 @@ tasks.check {
 
 tasks.jacocoTestReport {
   reports {
-    xml.isEnabled = true
-    xml.destination = File("$buildDir/reports/jacoco/test/jacoco.xml")
+    xml.required.set(true)
+    xml.outputLocation.set(File("$buildDir/reports/jacoco/test/jacoco.xml"))
   }
 }
 
 license {
-  header = rootProject.file("license/HEADER.txt")
+  header(rootProject.file("license/HEADER.txt"))
+  newLine(false)
   ext["year"] = "2020-" + Calendar.getInstance().get(Calendar.YEAR)
   ext["name"] = "Valery Maximov <maximovvalery@gmail.com>"
   ext["project"] = "BSLLS Development tools gradle plugin"

@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright © 2020-2021
+ * Copyright (c) 2020-2022
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -142,7 +142,7 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
       tableValues["Severity"] = "`${severityRuMap.getOrDefault(metadata.getOrDefault("severity", ""), "")}`"
       tableValues["Activated"] = "`${
         if (metadata.getOrDefault("activatedByDefault", "").toString()
-            .toLowerCase() != "false"
+            .lowercase() != "false"
         ) "Да" else "Нет"
       }`"
     } else {
@@ -157,7 +157,7 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
       tableValues["Severity"] = "`${severityEnMap.getOrDefault(metadata.getOrDefault("severity", ""), "")}`"
       tableValues["Activated"] = "`${
         if (metadata.getOrDefault("activatedByDefault", "").toString()
-            .toLowerCase() != "false"
+            .lowercase() != "false"
         ) "Yes" else "No"
       }`"
     }
@@ -168,7 +168,7 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
       ) "BSL`<br>`OS" else metadata.getOrDefault("scope", "").toString()
     }`"
     tableValues["Minutes"] = "`${metadata.getOrDefault("minutesToFix", "")}`"
-    tableValues["Tags"] = metadata.getOrDefault("tags", "").toString().toLowerCase()
+    tableValues["Tags"] = metadata.getOrDefault("tags", "").toString().lowercase()
       .replace("[", "`")
       .replace("]", "`")
       .replace(", ", "`<br>`")
