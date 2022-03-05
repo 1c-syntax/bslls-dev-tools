@@ -1,0 +1,28 @@
+name: Publish release
+
+on:
+  release:
+    types: [ published, edited ]
+  push:
+    branches:
+    - "release/*"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        java_version: ['11']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK ${{ matrix.java_version }}
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java_version }}
+        distribution: 'adopt'
+    - name: Build with Gradle
+      run: ./gradlew check --stacktrace
+    - name: Publish plugin
+      run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.GRADLE_KEY }} -Pgradle.publish.secret=${{ secrets.GRADLE_SECRET }}
