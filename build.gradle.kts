@@ -17,7 +17,7 @@ pluginBundle {
 }
 
 group = "io.github.1c-syntax"
-version = "0.5.1"
+version = "0.5.2"
 
 repositories {
   mavenLocal()
@@ -26,6 +26,7 @@ repositories {
 
 dependencies {
   compileOnly(gradleApi())
+  implementation(kotlin("stdlib-jdk8"))
   implementation("commons-io", "commons-io", "2.6")
 
   testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.1")
@@ -35,10 +36,10 @@ dependencies {
 
 tasks {
   compileKotlin {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "1.8"
   }
   compileTestKotlin {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "1.8"
   }
 }
 
