@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright © 2020-2021
+ * Copyright (c) 2020-2022
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -36,6 +36,7 @@ class BSLLSSourceReader {
     private const val diagnosticInfoClassName = "$diagnosticPackageName.metadata.DiagnosticInfo"
     private const val diagnosticCodeClassName = "$diagnosticPackageName.metadata.DiagnosticCode"
     private const val diagnosticParameterInfoClassName = "$diagnosticPackageName.metadata.DiagnosticParameterInfo"
+    private const val stringInternerClassName = "com.github._1c_syntax.utils.StringInterner"
     private const val diagnosticsClassesFolder =
       "classes/java/main/com/github/_1c_syntax/bsl/languageserver/diagnostics"
 
@@ -85,6 +86,7 @@ class BSLLSSourceReader {
       val classLoader = createClassLoader(project)
       val lsConfigurationRu = createLSConfiguration(classLoader, "ru")
       val lsConfigurationEn = createLSConfiguration(classLoader, "en")
+      val stringInterner = createStringInterner(classLoader)
 
       val result = hashMapOf<String, HashMap<String, Any>>()
       File(project.buildDir, diagnosticsClassesFolder)
@@ -97,8 +99,8 @@ class BSLLSSourceReader {
           val diagnosticClass =
             classLoader.loadClass("${diagnosticPackageName}.${it.nameWithoutExtension}")
           if (!diagnosticClass.toString().startsWith("interface")) {
-            val diagnosticInfoRu = createDiagnosticInfo(classLoader, diagnosticClass, lsConfigurationRu)
-            val diagnosticInfoEn = createDiagnosticInfo(classLoader, diagnosticClass, lsConfigurationEn)
+            val diagnosticInfoRu = createDiagnosticInfo(classLoader, diagnosticClass, lsConfigurationRu, stringInterner)
+            val diagnosticInfoEn = createDiagnosticInfo(classLoader, diagnosticClass, lsConfigurationEn, stringInterner)
 
             val metadata = getDiagnosticInfo(classLoader, diagnosticInfoRu, diagnosticInfoEn)
             if (metadata.isNotEmpty() && metadata["key"] is String) {
@@ -158,10 +160,11 @@ class BSLLSSourceReader {
     private fun createDiagnosticInfo(
       classLoader: ClassLoader,
       diagnosticClass: Any,
-      lsConfiguration: Any
+      lsConfiguration: Any,
+      stringInterner: Any
     ): Any {
       return classLoader.loadClass(diagnosticInfoClassName)
-        .declaredConstructors[0].newInstance(diagnosticClass, lsConfiguration)
+        .declaredConstructors[0].newInstance(diagnosticClass, lsConfiguration, stringInterner)
     }
 
     private fun createLSConfiguration(classLoader: ClassLoader, lang: String): Any {
@@ -171,12 +174,17 @@ class BSLLSSourceReader {
 
       val languageClass = classLoader.loadClass(languageClassName)
       val language = languageClass.getMethod("valueOf", classLoader.loadClass("java.lang.String"))
-        .invoke(languageClass, lang.toUpperCase())
+        .invoke(languageClass, lang.uppercase())
 
       languageServerConfigurationClass.getDeclaredMethod("setLanguage", languageClass)
         .invoke(lsConfiguration, language)
 
       return lsConfiguration
+    }
+
+    private fun createStringInterner(classLoader: ClassLoader): Any {
+      val stringInternerClass = classLoader.loadClass(stringInternerClassName)
+      return stringInternerClass.getConstructor().newInstance()
     }
 
     private fun createClassLoader(project: Project): ClassLoader {

@@ -1,6 +1,8 @@
-name: Java CI
+name: Publish release
 
-on: [push, pull_request]
+on:
+  release:
+    types: [ published ]
 
 jobs:
   build:
@@ -8,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java_version: ['11', '17']
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        java_version: ['11']
+        os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK ${{ matrix.java_version }}
@@ -19,9 +21,5 @@ jobs:
         distribution: 'adopt'
     - name: Build with Gradle
       run: ./gradlew check --stacktrace
-    - name: Archive test results
-      if: failure()
-      uses: actions/upload-artifact@v3
-      with:
-        name: junit_report_${{ matrix.os }}_${{ matrix.java_version }}
-        path: build/reports/tests/test
+    - name: Publish plugin
+      run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.GRADLE_KEY }} -Pgradle.publish.secret=${{ secrets.GRADLE_SECRET }}

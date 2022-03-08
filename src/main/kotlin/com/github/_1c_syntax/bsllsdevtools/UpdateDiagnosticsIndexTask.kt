@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright © 2020-2021
+ * Copyright (c) 2020-2022
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -61,7 +61,7 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
       val metadata = it.value
       val typeString: String
       val typeKey: String = metadata.getOrDefault("type", "") as String
-      val tags = metadata.getOrDefault("tags", "").toString().toLowerCase()
+      val tags = metadata.getOrDefault("tags", "").toString().lowercase()
         .replace("[", "`")
         .replace("]", "`")
         .replace(", ", "`<br>`")
@@ -73,7 +73,7 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
           .replace(
             "<Activated>",
             if (metadata.getOrDefault("activatedByDefault", "").toString()
-                .toLowerCase() != "false"
+                .lowercase() != "false"
             ) "Да" else "Нет"
           )
           .replace(
@@ -90,7 +90,7 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
           .replace(
             "<Activated>",
             if (metadata.getOrDefault("activatedByDefault", "").toString()
-                .toLowerCase() != "false"
+                .lowercase() != "false"
             ) "Yes" else "No"
           )
           .replace(
