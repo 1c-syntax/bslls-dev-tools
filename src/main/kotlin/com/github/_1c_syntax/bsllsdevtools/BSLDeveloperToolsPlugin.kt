@@ -39,6 +39,13 @@ class BSLDeveloperToolsPlugin : Plugin<Project> {
       it.outputDir.set(project.layout.projectDirectory)
     }
 
+    project.tasks.register("generateDiagnosticDocs", GenerateDiagnosticDocsTask::class.java) {
+      it.outputDir.set(project.layout.projectDirectory)
+    }
+    project.tasks.register("generateDiagnosticsIndex", GenerateDiagnosticsIndexTask::class.java) {
+      it.outputDir.set(project.layout.projectDirectory)
+    }
+
     project.tasks.register("precommit") {
       it.description = "Run all precommit tasks"
       it.group = "Developer tools"
