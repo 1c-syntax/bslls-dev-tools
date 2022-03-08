@@ -21,6 +21,9 @@
  */
 package com.github._1c_syntax.bsllsdevtools
 
+import org.gradle.api.file.DirectoryProperty
+import java.io.File
+
 object Utils {
   @JvmStatic
   fun wrapSpaces(string: String, len: Int): String {
@@ -55,5 +58,32 @@ object Utils {
     }
 
     return keysLenMap
+  }
+
+  @JvmStatic
+  fun diagnosticDocPath(outputDir: DirectoryProperty, lang: String, key: String): File {
+    return if (lang == "ru") {
+      File(outputDir.get().asFile.path, "docs/diagnostics/${key}.md")
+    } else {
+      File(outputDir.get().asFile.path, "docs/en/diagnostics/${key}.md")
+    }
+  }
+
+  @JvmStatic
+  fun diagnosticIndexPath(outputDir: DirectoryProperty, lang: String): File {
+    return if (lang == "ru") {
+      File(outputDir.get().asFile.path, "docs/diagnostics/index.md")
+    } else {
+      File(outputDir.get().asFile.path, "docs/en/diagnostics/index.md")
+    }
+  }
+
+  @JvmStatic
+  fun createDocFolder(outputDir: DirectoryProperty, folder: String, clean: Boolean) {
+    val dir = File(outputDir.get().asFile.path, folder)
+    if (dir.exists() && clean) {
+      dir.deleteRecursively()
+    }
+    dir.mkdirs()
   }
 }
