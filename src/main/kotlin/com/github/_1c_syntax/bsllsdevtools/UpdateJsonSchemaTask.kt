@@ -33,7 +33,7 @@ open class UpdateJsonSchemaTask @javax.inject.Inject constructor(objects: Object
   init {
     group = "Developer tools"
     description = "Update json schema"
-    dependsOn(":jar")
+    dependsOn(":classes")
     outputs.upToDateWhen { false }
   }
 

@@ -39,7 +39,7 @@ open class GenerateDiagnosticDocsTask @javax.inject.Inject constructor(objects: 
   init {
     group = "build"
     description = "Generate diagnostic docs"
-    dependsOn(":jar")
+    dependsOn(":classes")
     outputs.upToDateWhen { false }
   }
 

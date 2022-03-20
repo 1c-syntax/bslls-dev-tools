@@ -32,7 +32,7 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
   init {
     group = "Developer tools"
     description = "Update diagnostics index after changes"
-    dependsOn(":jar")
+    dependsOn(":classes")
     outputs.upToDateWhen { false }
   }
 
