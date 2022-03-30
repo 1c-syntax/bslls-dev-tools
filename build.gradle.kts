@@ -7,7 +7,7 @@ plugins {
   kotlin("jvm") version "1.6.10"
   id("java-gradle-plugin")
   id("org.cadixdev.licenser") version "0.6.1"
-  id("com.gradle.plugin-publish") version "0.18.0"
+  id("com.gradle.plugin-publish") version "0.21.0"
 }
 
 pluginBundle {
