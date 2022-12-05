@@ -26,14 +26,11 @@ import com.github._1c_syntax.bsllsdevtools.BSLLSSourceReader.Companion.severityR
 import com.github._1c_syntax.bsllsdevtools.BSLLSSourceReader.Companion.typeEnMap
 import com.github._1c_syntax.bsllsdevtools.BSLLSSourceReader.Companion.typeRuMap
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import java.io.File
 
-open class GenerateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: ObjectFactory) : DefaultTask() {
+open class GenerateDiagnosticsIndexTask constructor() : DefaultTask() {
 
   init {
     group = "build"
@@ -48,15 +45,14 @@ open class GenerateDiagnosticsIndexTask @javax.inject.Inject constructor(objects
   private val templateIndexLine =
     "\n [<Name>](<Name>.md) | <Description> | <Activated> | <Severity> | <Type> | <Tags> "
 
-  @OutputDirectory
-  val outputDir: DirectoryProperty = objects.directoryProperty()
-
   fun setBuild(build: Boolean) {
     this.build = build
   }
 
   @TaskAction
   fun run() {
+    var outputDir = project.projectDir;
+
     if (!build) {
       Utils.createDocFolder(outputDir, "build/docs/diagnostics", false)
       Utils.createDocFolder(outputDir, "build/docs/en/diagnostics", false)
@@ -64,11 +60,15 @@ open class GenerateDiagnosticsIndexTask @javax.inject.Inject constructor(objects
 
     val diagnosticsMetadata = BSLLSSourceReader.getDiagnosticsMetadata(project).toSortedMap()
 
-    generateDiagnosticIndex("ru", diagnosticsMetadata)
-    generateDiagnosticIndex("en", diagnosticsMetadata)
+    generateDiagnosticIndex(outputDir, "ru", diagnosticsMetadata)
+    generateDiagnosticIndex(outputDir, "en", diagnosticsMetadata)
   }
 
-  private fun generateDiagnosticIndex(lang: String, diagnosticsMetadata: Map<String, HashMap<String, Any>>) {
+  private fun generateDiagnosticIndex(
+    outputDir: File,
+    lang: String,
+    diagnosticsMetadata: Map<String, HashMap<String, Any>>
+  ) {
     var indexText = ""
     val typeCount = hashMapOf<String, Int>()
     diagnosticsMetadata.forEach {
@@ -122,9 +122,9 @@ open class GenerateDiagnosticsIndexTask @javax.inject.Inject constructor(objects
     var destinationPath = sourcePath
     if (!build) {
       destinationPath = if (lang == "ru") {
-        File(outputDir.get().asFile.path, "build/docs/index.md")
+        File(outputDir, "build/docs/index.md")
       } else {
-        File(outputDir.get().asFile.path, "build/docs/en/index.md")
+        File(outputDir, "build/docs/en/index.md")
       }
     }
 

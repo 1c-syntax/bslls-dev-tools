@@ -27,14 +27,11 @@ import com.github._1c_syntax.bsllsdevtools.BSLLSSourceReader.Companion.typeEnMap
 import com.github._1c_syntax.bsllsdevtools.BSLLSSourceReader.Companion.typeParamRuMap
 import com.github._1c_syntax.bsllsdevtools.BSLLSSourceReader.Companion.typeRuMap
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import java.io.File
 
-open class GenerateDiagnosticDocsTask @javax.inject.Inject constructor(objects: ObjectFactory) : DefaultTask() {
+open class GenerateDiagnosticDocsTask constructor() : DefaultTask() {
 
   init {
     group = "build"
@@ -54,15 +51,14 @@ open class GenerateDiagnosticDocsTask @javax.inject.Inject constructor(objects: 
       "### <DiagnosticIgnorance>\n\n```bsl\n// BSLLS:<DiagnosticKey>-off\n// BSLLS:<DiagnosticKey>-on\n```\n\n" +
       "### <ParameterConfig>\n\n```json\n\"<DiagnosticKey>\": <DiagnosticConfig>\n```\n"
 
-  @OutputDirectory
-  val outputDir: DirectoryProperty = objects.directoryProperty()
-
   fun setBuild(build: Boolean) {
     this.build = build
   }
 
   @TaskAction
   fun run() {
+    var outputDir = project.projectDir;
+
     if (!build) {
       Utils.createDocFolder(outputDir, "build/docs/diagnostics", true)
       Utils.createDocFolder(outputDir, "build/docs/en/diagnostics", true)
@@ -71,20 +67,20 @@ open class GenerateDiagnosticDocsTask @javax.inject.Inject constructor(objects: 
     val diagnosticsMetadata = BSLLSSourceReader.getDiagnosticsMetadata(project)
 
     diagnosticsMetadata.forEach {
-      generateDocFile("ru", it.key, it.value)
-      generateDocFile("en", it.key, it.value)
+      generateDocFile(outputDir, "ru", it.key, it.value)
+      generateDocFile(outputDir, "en", it.key, it.value)
     }
   }
 
-  private fun generateDocFile(lang: String, key: String, metadata: HashMap<String, Any>) {
+  private fun generateDocFile(outputDir: File, lang: String, key: String, metadata: HashMap<String, Any>) {
     val sourcePath = Utils.diagnosticDocPath(outputDir, lang, key)
 
     var destinationPath = sourcePath
     if (!build) {
       destinationPath = if (lang == "ru") {
-        File(outputDir.get().asFile.path, "build/docs/diagnostics/${key}.md")
+        File(outputDir, "build/docs/diagnostics/${key}.md")
       } else {
-        File(outputDir.get().asFile.path, "build/docs/en/diagnostics/${key}.md")
+        File(outputDir, "build/docs/en/diagnostics/${key}.md")
       }
     }
 

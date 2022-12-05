@@ -4,10 +4,10 @@ plugins {
   java
   jacoco
   id("maven-publish")
-  kotlin("jvm") version "1.7.10"
+  kotlin("jvm") version "1.7.21"
   id("java-gradle-plugin")
   id("org.cadixdev.licenser") version "0.6.1"
-  id("com.gradle.plugin-publish") version "1.0.0"
+  id("com.gradle.plugin-publish") version "1.1.0"
 }
 
 pluginBundle {
@@ -17,7 +17,7 @@ pluginBundle {
 }
 
 group = "io.github.1c-syntax"
-version = "0.7.0"
+version = "0.7.2"
 
 repositories {
   mavenLocal()
@@ -36,10 +36,10 @@ dependencies {
 
 tasks {
   compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
   }
   compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
   }
 }
 

@@ -26,24 +26,16 @@ import org.gradle.api.Project
 
 class BSLDeveloperToolsPlugin : Plugin<Project> {
   override fun apply(project: Project) {
-    project.tasks.register("updateDiagnosticDocs", UpdateDiagnosticDocsTask::class.java) {
-      it.outputDir.set(project.layout.projectDirectory)
-    }
-    project.tasks.register("updateDiagnosticsIndex", UpdateDiagnosticsIndexTask::class.java) {
-      it.outputDir.set(project.layout.projectDirectory)
-    }
-    project.tasks.register("updateJsonSchema", UpdateJsonSchemaTask::class.java) {
-      it.outputDir.set(project.layout.projectDirectory)
-    }
     project.tasks.register("newDiagnostic", NewDiagnosticTask::class.java) {
       it.outputDir.set(project.layout.projectDirectory)
     }
 
-    project.tasks.register("generateDiagnosticDocs", GenerateDiagnosticDocsTask::class.java) {
-      it.outputDir.set(project.layout.projectDirectory)
-    }
-    project.tasks.register("generateDiagnosticsIndex", GenerateDiagnosticsIndexTask::class.java) {
-      it.outputDir.set(project.layout.projectDirectory)
+    with(project.tasks) {
+      project.tasks.register("updateDiagnosticDocs", UpdateDiagnosticDocsTask::class.java)
+      project.tasks.register("updateDiagnosticsIndex", UpdateDiagnosticsIndexTask::class.java)
+      project.tasks.register("updateJsonSchema", UpdateJsonSchemaTask::class.java)
+      project.tasks.register("generateDiagnosticDocs", GenerateDiagnosticDocsTask::class.java)
+      project.tasks.register("generateDiagnosticsIndex", GenerateDiagnosticsIndexTask::class.java)
     }
 
     project.tasks.register("precommit") {

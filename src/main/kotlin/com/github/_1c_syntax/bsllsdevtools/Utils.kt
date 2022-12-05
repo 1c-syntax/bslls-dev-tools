@@ -21,7 +21,6 @@
  */
 package com.github._1c_syntax.bsllsdevtools
 
-import org.gradle.api.file.DirectoryProperty
 import java.io.File
 
 object Utils {
@@ -61,26 +60,26 @@ object Utils {
   }
 
   @JvmStatic
-  fun diagnosticDocPath(outputDir: DirectoryProperty, lang: String, key: String): File {
+  fun diagnosticDocPath(outputDir: File, lang: String, key: String): File {
     return if (lang == "ru") {
-      File(outputDir.get().asFile.path, "docs/diagnostics/${key}.md")
+      File(outputDir.path, "docs/diagnostics/${key}.md")
     } else {
-      File(outputDir.get().asFile.path, "docs/en/diagnostics/${key}.md")
+      File(outputDir.path, "docs/en/diagnostics/${key}.md")
     }
   }
 
   @JvmStatic
-  fun diagnosticIndexPath(outputDir: DirectoryProperty, lang: String): File {
+  fun diagnosticIndexPath(outputDir: File, lang: String): File {
     return if (lang == "ru") {
-      File(outputDir.get().asFile.path, "docs/diagnostics/index.md")
+      File(outputDir.path, "docs/diagnostics/index.md")
     } else {
-      File(outputDir.get().asFile.path, "docs/en/diagnostics/index.md")
+      File(outputDir.path, "docs/en/diagnostics/index.md")
     }
   }
 
   @JvmStatic
-  fun createDocFolder(outputDir: DirectoryProperty, folder: String, clean: Boolean) {
-    val dir = File(outputDir.get().asFile.path, folder)
+  fun createDocFolder(outputs: File, folder: String, clean: Boolean) {
+    val dir = File(outputs.path, folder)
     if (dir.exists() && clean) {
       dir.deleteRecursively()
     }
