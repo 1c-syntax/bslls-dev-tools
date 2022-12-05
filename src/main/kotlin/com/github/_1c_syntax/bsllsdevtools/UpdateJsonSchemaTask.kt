@@ -22,13 +22,10 @@
 package com.github._1c_syntax.bsllsdevtools
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-open class UpdateJsonSchemaTask @javax.inject.Inject constructor(objects: ObjectFactory) : DefaultTask() {
+open class UpdateJsonSchemaTask constructor() : DefaultTask() {
 
   init {
     group = "Developer tools"
@@ -41,24 +38,22 @@ open class UpdateJsonSchemaTask @javax.inject.Inject constructor(objects: Object
   private val diagnosticSchemaPath =
     "src/main/resources/com/github/_1c_syntax/bsl/languageserver/configuration/parameters-schema.json"
 
-  @OutputDirectory
-  val outputDir: DirectoryProperty = objects.directoryProperty()
-
   @TaskAction
   fun run() {
+    var outputDir = project.projectDir;
     val diagnosticsMetadata = BSLLSSourceReader.getDiagnosticsMetadata(project)
     val diagnosticMeta = transformMetadata(diagnosticsMetadata)
     var schemaJson = groovy.json.JsonSlurper()
-      .parseText(File(outputDir.get().asFile.path, diagnosticSchemaPath).readText(charset("UTF-8")))
+      .parseText(File(outputDir, diagnosticSchemaPath).readText(charset("UTF-8")))
     if (schemaJson is Map<*, *>) {
       val schema = schemaJson.toMap().toMutableMap()
       schema["definitions"] = diagnosticMeta["diagnostics"]
       val resultString = groovy.json.JsonBuilder(schema).toPrettyString()
-      File(outputDir.get().asFile.path, diagnosticSchemaPath).writeText(resultString, charset("UTF-8"))
+      File(outputDir, diagnosticSchemaPath).writeText(resultString, charset("UTF-8"))
     }
 
     schemaJson = groovy.json.JsonSlurper()
-      .parseText(File(outputDir.get().asFile.path, schemaPath).readText(charset("UTF-8")))
+      .parseText(File(outputDir, schemaPath).readText(charset("UTF-8")))
     if (schemaJson is Map<*, *>) {
       val schema = schemaJson.toMap().toMutableMap()
       val schemaDefinitions = schema["definitions"]
@@ -74,7 +69,7 @@ open class UpdateJsonSchemaTask @javax.inject.Inject constructor(objects: Object
       }
 
       val resultString = groovy.json.JsonBuilder(schema).toPrettyString()
-      File(outputDir.get().asFile.path, schemaPath).writeText(resultString, charset("UTF-8"))
+      File(outputDir, schemaPath).writeText(resultString, charset("UTF-8"))
     }
   }
 
@@ -106,12 +101,15 @@ open class UpdateJsonSchemaTask @javax.inject.Inject constructor(objects: Object
               "boolean" -> {
                 it.getOrDefault("defaultValue", "false").toString().toBoolean()
               }
+
               "integer" -> {
                 it.getOrDefault("defaultValue", "0").toString().toInt()
               }
+
               "number" -> {
                 it.getOrDefault("defaultValue", "0").toString().toFloat()
               }
+
               else -> {
                 "${it.getOrDefault("defaultValue", "")}"
               }

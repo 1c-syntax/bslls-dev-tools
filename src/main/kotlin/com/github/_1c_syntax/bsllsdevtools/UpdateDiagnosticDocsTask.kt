@@ -22,12 +22,10 @@
 package com.github._1c_syntax.bsllsdevtools
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 
-open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: ObjectFactory) : DefaultTask() {
+open class UpdateDiagnosticDocsTask constructor() : DefaultTask() {
 
   init {
     group = "Developer tools"
@@ -39,19 +37,18 @@ open class UpdateDiagnosticDocsTask @javax.inject.Inject constructor(objects: Ob
   private val templateDocHeader = "# <Description> (<DiagnosticKey>)\n\n" +
     "<!-- Блоки выше заполняются автоматически, не трогать -->\n"
 
-  @OutputDirectory
-  val outputDir: DirectoryProperty = objects.directoryProperty()
-
   @TaskAction
   fun run() {
+    var outputDir = project.projectDir;
+
     val diagnosticsMetadata = BSLLSSourceReader.getDiagnosticsMetadata(project)
     diagnosticsMetadata.forEach {
-      updateDocFile("ru", it.key, it.value)
-      updateDocFile("en", it.key, it.value)
+      updateDocFile(outputDir, "ru", it.key, it.value)
+      updateDocFile(outputDir, "en", it.key, it.value)
     }
   }
 
-  private fun updateDocFile(lang: String, key: String, metadata: HashMap<String, Any>) {
+  private fun updateDocFile(outputDir: File, lang: String, key: String, metadata: HashMap<String, Any>) {
     val docPath = Utils.diagnosticDocPath(outputDir, lang, key)
     val text = docPath.readText(charset("UTF-8"))
 

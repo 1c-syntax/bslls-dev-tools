@@ -22,12 +22,10 @@
 package com.github._1c_syntax.bsllsdevtools
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 
-open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: ObjectFactory) : DefaultTask() {
+open class UpdateDiagnosticsIndexTask constructor() : DefaultTask() {
 
   init {
     group = "Developer tools"
@@ -36,16 +34,14 @@ open class UpdateDiagnosticsIndexTask @javax.inject.Inject constructor(objects: 
     outputs.upToDateWhen { false }
   }
 
-  @OutputDirectory
-  val outputDir: DirectoryProperty = objects.directoryProperty()
-
   @TaskAction
   fun run() {
-    updateDiagnosticIndex("ru")
-    updateDiagnosticIndex("en")
+    var outputDir = project.projectDir;
+    updateDiagnosticIndex(outputDir, "ru")
+    updateDiagnosticIndex(outputDir, "en")
   }
 
-  private fun updateDiagnosticIndex(lang: String) {
+  private fun updateDiagnosticIndex(outputDir: File, lang: String) {
     val indexPath = Utils.diagnosticIndexPath(outputDir, lang)
     val text = indexPath.readText(charset("UTF-8"))
 
