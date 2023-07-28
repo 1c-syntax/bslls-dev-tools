@@ -17,7 +17,7 @@ pluginBundle {
 }
 
 group = "io.github.1c-syntax"
-version = "0.7.2"
+version = "0.7.3"
 
 repositories {
   mavenLocal()
