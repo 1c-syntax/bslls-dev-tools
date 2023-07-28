@@ -59,11 +59,11 @@ open class UpdateJsonSchemaTask constructor() : DefaultTask() {
       val schemaDefinitions = schema["definitions"]
       if (schemaDefinitions != null && schemaDefinitions is Map<*, *>) {
         val schemaDefinitionInner = schemaDefinitions.toMap().toMutableMap()
-        val schemaParameters = schemaDefinitionInner["parameters"]
+        val schemaParameters = schemaDefinitionInner["diagnosticParameters"]
         if (schemaParameters != null && schemaParameters is Map<*, *>) {
           val schemaParametersInner = schemaParameters.toMap().toMutableMap()
           schemaParametersInner["properties"] = diagnosticMeta["diagnosticsKeys"]
-          schemaDefinitionInner["parameters"] = schemaParametersInner
+          schemaDefinitionInner["diagnosticParameters"] = schemaParametersInner
         }
         schema["definitions"] = schemaDefinitionInner
       }
