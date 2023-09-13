@@ -4,7 +4,7 @@ plugins {
   java
   jacoco
   id("maven-publish")
-  kotlin("jvm") version "1.7.21"
+  kotlin("jvm") version "1.9.10"
   id("java-gradle-plugin")
   id("org.cadixdev.licenser") version "0.6.1"
   id("com.gradle.plugin-publish") version "1.1.0"
