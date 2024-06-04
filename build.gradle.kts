@@ -27,7 +27,7 @@ gradlePlugin {
 }
 
 group = "io.github.1c-syntax"
-version = "0.8"
+version = "0.8.0"
 
 repositories {
   mavenLocal()
