@@ -1,10 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.util.*
 
 plugins {
   java
   jacoco
   id("maven-publish")
-  kotlin("jvm") version "1.9.24"
+  kotlin("jvm") version "2.0.0"
   id("java-gradle-plugin")
   id("org.cadixdev.licenser") version "0.6.1"
   id("com.gradle.plugin-publish") version "1.2.1"
@@ -25,7 +27,7 @@ gradlePlugin {
 }
 
 group = "io.github.1c-syntax"
-version = "0.7.3"
+version = "0.8"
 
 repositories {
   mavenLocal()
@@ -42,18 +44,16 @@ dependencies {
   testImplementation("org.assertj", "assertj-core", "3.18.1")
 }
 
-tasks {
-  compileKotlin {
-    kotlinOptions.jvmTarget = "11"
-  }
-  compileTestKotlin {
-    kotlinOptions.jvmTarget = "11"
+kotlin {
+  compilerOptions {
+    apiVersion.set(KotlinVersion.KOTLIN_2_0)
+    jvmTarget.set(JvmTarget.JVM_17)
   }
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_11
-  targetCompatibility = JavaVersion.VERSION_11
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.test {
