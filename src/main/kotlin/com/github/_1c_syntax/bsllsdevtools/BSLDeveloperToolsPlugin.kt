@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright (c) 2020-2023
+ * Copyright (c) 2020-2024
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
