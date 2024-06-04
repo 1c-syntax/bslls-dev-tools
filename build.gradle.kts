@@ -10,10 +10,18 @@ plugins {
   id("com.gradle.plugin-publish") version "1.2.1"
 }
 
-pluginBundle {
-  website = "https://github.com/1c-syntax/bslls-dev-tools"
-  vcsUrl = "https://github.com/1c-syntax/bslls-dev-tools.git"
-  tags = listOf("bslls", "dev-tools")
+gradlePlugin {
+  website.set("https://github.com/1c-syntax/bslls-dev-tools")
+  vcsUrl.set("https://github.com/1c-syntax/bslls-dev-tools.git")
+  plugins {
+    create("bslls-dev-tools") {
+      id = "io.github.1c-syntax.bslls-dev-tools"
+      implementationClass = "com.github._1c_syntax.bsllsdevtools.BSLDeveloperToolsPlugin"
+      displayName = "BSLLS Development tools gradle plugin"
+      description = "BSLLS Development tools gradle plugin"
+      tags.set(listOf("bslls", "dev-tools", "bsl-language-server", "1c-syntax"))
+    }
+  }
 }
 
 group = "io.github.1c-syntax"
@@ -40,17 +48,6 @@ tasks {
   }
   compileTestKotlin {
     kotlinOptions.jvmTarget = "11"
-  }
-}
-
-gradlePlugin {
-  plugins {
-    create("bslls-dev-tools") {
-      id = "io.github.1c-syntax.bslls-dev-tools"
-      implementationClass = "com.github._1c_syntax.bsllsdevtools.BSLDeveloperToolsPlugin"
-      displayName = "BSLLS Development tools gradle plugin"
-      description = "BSLLS Development tools gradle plugin"
-    }
   }
 }
 
