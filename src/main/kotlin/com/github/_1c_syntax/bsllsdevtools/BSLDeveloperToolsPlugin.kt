@@ -28,6 +28,7 @@ class BSLDeveloperToolsPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.tasks.register("newDiagnostic", NewDiagnosticTask::class.java) {
       it.outputDir.set(project.layout.projectDirectory)
+      it.doNotTrackState("")
     }
 
     with(project.tasks) {
