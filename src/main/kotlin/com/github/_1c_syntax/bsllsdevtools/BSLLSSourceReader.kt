@@ -1,7 +1,7 @@
 /*
  * This file is a part of BSLLS Development tools gradle plugin.
  *
- * Copyright (c) 2020-2024
+ * Copyright (c) 2020-2026
  * Valery Maximov <maximovvalery@gmail.com> and contributors
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -33,9 +33,9 @@ class BSLLSSourceReader {
     private const val diagnosticPackageName = "$lsPackageName.diagnostics"
     private const val lsConfigurationClassName = "$lsPackageName.configuration.LanguageServerConfiguration"
     private const val languageClassName = "$lsPackageName.configuration.Language"
-    private const val diagnosticInfoClassName = "$diagnosticPackageName.metadata.DiagnosticInfo"
+    private const val diagnosticInfoClassName = "$diagnosticPackageName.info.DiagnosticInfo"
     private const val diagnosticCodeClassName = "$diagnosticPackageName.metadata.DiagnosticCode"
-    private const val diagnosticParameterInfoClassName = "$diagnosticPackageName.metadata.DiagnosticParameterInfo"
+    private const val diagnosticParameterInfoClassName = "$diagnosticPackageName.info.DiagnosticParameterInfo"
     private const val stringInternerClassName = "com.github._1c_syntax.utils.StringInterner"
     private const val diagnosticsClassesFolder =
       "classes/java/main/com/github/_1c_syntax/bsl/languageserver/diagnostics"
