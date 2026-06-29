@@ -13,7 +13,7 @@ jobs:
         java_version: ['17']
         os: [ubuntu-latest]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Set up JDK ${{ matrix.java_version }}
       uses: actions/setup-java@v4
       with:
