@@ -97,6 +97,8 @@ open class UpdateJsonSchemaTask constructor() : DefaultTask() {
             val typeString = it.getOrDefault("type", "").toString().lowercase()
               .replace("pattern", "string")
               .replace("float", "number")
+            // Either<String, List<String>> — параметр-список: строка через запятую либо массив строк.
+            val isStringList = typeString == "either"
             val value = when (typeString) {
               "boolean" -> {
                 it.getOrDefault("defaultValue", "false").toString().toBoolean()
@@ -114,12 +116,15 @@ open class UpdateJsonSchemaTask constructor() : DefaultTask() {
                 "${it.getOrDefault("defaultValue", "")}"
               }
             }
-            val oneParam = hashMapOf(
-              "type" to typeString,
+            val oneParam = hashMapOf<String, Any>(
+              "type" to if (isStringList) arrayListOf("string", "array") else typeString,
               "title" to it.getOrDefault("description_en", "").toString(),
               "description" to it.getOrDefault("description_en", "").toString(),
               "default" to value
             )
+            if (isStringList) {
+              oneParam["items"] = hashMapOf("type" to "string")
+            }
 
             params[it.getOrDefault("name", "").toString()] = oneParam
           }
