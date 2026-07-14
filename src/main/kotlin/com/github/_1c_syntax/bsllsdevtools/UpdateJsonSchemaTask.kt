@@ -97,8 +97,8 @@ open class UpdateJsonSchemaTask constructor() : DefaultTask() {
             val typeString = it.getOrDefault("type", "").toString().lowercase()
               .replace("pattern", "string")
               .replace("float", "number")
-            // Either<String, List<String>> — параметр-список: строка через запятую либо массив строк.
-            val isStringList = typeString == "either"
+            // List — параметр-список: строка через запятую либо массив строк.
+            val isStringList = typeString == "list"
             val value = when (typeString) {
               "boolean" -> {
                 it.getOrDefault("defaultValue", "false").toString().toBoolean()
