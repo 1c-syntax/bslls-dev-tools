@@ -9,7 +9,7 @@ plugins {
   kotlin("jvm") version "2.4.10"
   id("java-gradle-plugin")
   id("org.cadixdev.licenser") version "0.6.1"
-  id("com.gradle.plugin-publish") version "2.1.1"
+  id("com.gradle.plugin-publish") version "2.2.0"
 }
 
 gradlePlugin {
